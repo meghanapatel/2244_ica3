@@ -7,7 +7,7 @@ pipeline {
             }
         }
  
-        stage('Clone Git Repo') {
+        stage('checkout to develop') {
             steps {
                 checkout scm
             }
@@ -16,8 +16,8 @@ pipeline {
         stage('Build and run docker image') {
             echo "Building image and running the container "
              steps {
-                sh 'sudo docker build -t meghanapatel2701/2244_ica3 .'
-                sh 'sudo docker run -d -p 8081:80 meghanapatel2701/2244_ica3'
+                sh 'docker build -t meghanapatel2701/2244_ica3 .'
+                sh 'docker run -d -p 8081:80 meghanapatel2701/2244_ica3'
             } 
         }
  
@@ -29,9 +29,8 @@ pipeline {
         stage('tagging'){
         
              steps{
-                 sh "sudo docker tag meghanapatel2701/2244_ica3:latest meghanapatel2701/2244_ica3:latest" 
-
-                 sh "sudo docker tag meghanapatel2701/2244_ica3:latest meghanapatel2701/2244_ica3:develop-${env.BUILD_ID}" 
+                 sh 'docker tag meghanapatel2701/2244_ica3:latest meghanapatel2701/2244_ica3:latest'
+                 sh "docker tag meghanapatel2701/2244_ica3:latest meghanapatel2701/2244_ica3:develop-${env.BUILD_ID}"
             }
         }
  
@@ -39,11 +38,11 @@ pipeline {
             steps {
                 echo 'Building..'
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-auth', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh '''
-                            sudo docker login -u ${USERNAME} -p ${PASSWORD}
-                            sudo docker push meghanapatel2701/2244_ica3:latest
-                        '''
-                        sh "sudo docker push meghanapatel2701/2244_ica3:develop-${env.BUILD_ID}"
+                        sh ''
+                             docker login -u ${USERNAME} -p ${PASSWORD}
+                             docker push meghanapatel2701/2244_ica3:latest
+                        ''
+                        sh " docker push meghanapatel2701/2244_ica3:develop-${env.BUILD_ID}"
                     }
             }
         }
