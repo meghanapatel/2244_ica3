@@ -1,0 +1,57 @@
+pipeline {
+    agent any
+    stages {
+        stage('Cleanup') {
+            steps {
+                cleanWs()
+            }
+        }
+ 
+        stage('Clone Git Repo') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build and run docker image') {
+            echo "Building image and running the container "
+             steps {
+                sh 'sudo docker build -t meghanapatel2701/2244_ica3 .'
+                sh 'sudo docker run -d -p 8081:80 meghanapatel2701/2244_ica3'
+            } 
+        }
+ 
+        stage('testing') {
+            steps {
+                sh 'curl -I 3.86.166.255:8081'
+            }
+        }
+        stage('tagging'){
+        
+             steps{
+                 sh "sudo docker tag meghanapatel2701/2244_ica3:latest meghanapatel2701/2244_ica3:latest" 
+
+                 sh "sudo docker tag meghanapatel2701/2244_ica3:latest meghanapatel2701/2244_ica3:develop-${env.BUILD_ID}" 
+            }
+        }
+ 
+        stage('Push') {
+            steps {
+                echo 'Building..'
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-auth', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh '''
+                            sudo docker login -u ${USERNAME} -p ${PASSWORD}
+                            sudo docker push meghanapatel2701/2244_ica3:latest
+                        '''
+                        sh "sudo docker push meghanapatel2701/2244_ica3:develop-${env.BUILD_ID}"
+                    }
+            }
+        }
+ 
+        
+ 
+    
+    }
+} 
+
+
