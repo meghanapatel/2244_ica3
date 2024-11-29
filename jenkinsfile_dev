@@ -20,8 +20,7 @@ pipeline {
         }
 
         stage('Build and run docker image') {
-            echo "Building image and running the container "
-             steps {
+            steps {
                 sh 'docker build -t meghanapatel2701/2244_ica3 .'
                 sh 'docker run -d -p 8081:80 meghanapatel2701/2244_ica3'
             } 
@@ -34,7 +33,7 @@ pipeline {
         }
         stage('tagging'){
         
-             steps{
+            steps{
                  sh 'docker tag meghanapatel2701/2244_ica3:latest meghanapatel2701/2244_ica3:latest'
                  sh "docker tag meghanapatel2701/2244_ica3:latest meghanapatel2701/2244_ica3:develop-${env.BUILD_ID}"
             }
