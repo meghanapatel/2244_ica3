@@ -3,8 +3,10 @@ pipeline {
     stages {
         stage('Build and run docker image') {
             steps {
+
                 sh 'sudo docker pull meghanapatel2701/2244_ica3:latest'
-                sh 'sudo docker run -d -p 8082:80 meghanapatel2701/2244_ica3:latest'
+                sh 'docker stop meghana || true && docker rm meghana || true'
+                sh 'sudo docker run --name meghana -d -p 8082:80 meghanapatel2701/2244_ica3:latest'
             } 
         }
 
