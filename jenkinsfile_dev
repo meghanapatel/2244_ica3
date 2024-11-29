@@ -22,13 +22,13 @@ pipeline {
         stage('Build and run docker image') {
             steps {
                 sh 'docker build -t meghanapatel2701/2244_ica3 .'
-                sh 'docker run -d -p 8081:80 meghanapatel2701/2244_ica3'
+                sh 'docker run -d -p 8084:80 meghanapatel2701/2244_ica3'
             } 
         }
  
         stage('testing') {
             steps {
-                sh 'curl -I 192.168.40.131:8081'
+                sh 'curl -I 192.168.40.131:808'4
             }
         }
         stage('tagging'){
