@@ -6,6 +6,12 @@ pipeline {
                 checkout scm
             }
         }
+stage('Verify Docker') {
+    steps {
+        sh 'docker --version'
+    }
+}
+
         stage('Pull Image') {
             steps {
                 sh 'docker pull meghanapatel2701/2244_ica3:latest'
