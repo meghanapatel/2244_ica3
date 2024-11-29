@@ -1,25 +1,21 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout Code') {
+        stage('Build and run docker image') {
             steps {
-                checkout scm
+                sh 'sudo docker pull meghanapatel2701/2244_ica3:latest'
+                sh 'sudo docker run -d -p 8082:80 meghanapatel2701/2244_ica3:latest'
+            } 
+        }
+
+
+        stage('testing') {
+            steps {
+                sh 'curl -I 192.168.219.163:8082'
             }
         }
-        stage('Pull Image') {
-            steps {
-                sh 'docker pull meghanapatel2701/2244_ica3:latest'
-            }
-        }
-        stage('Run Container') {
-            steps {
-                sh 'docker run -d -p 8082:80 meghanapatel2701/2244_ica3:latest'
-            }
-        }
-        stage('Test Website') {
-            steps {
-                sh 'curl -I http://localhost:8082'
+
+    
+    }
 }
-}
-}
-}
+
