@@ -13,6 +13,12 @@ pipeline {
             }
         }
 
+         stage('Clone from repository') {
+            steps {
+                git url: 'https://github.com/meghanapatel/2244_ica3.git', branch: 'develop'
+            }
+        }
+
         stage('Build and run docker image') {
             echo "Building image and running the container "
              steps {
@@ -23,7 +29,7 @@ pipeline {
  
         stage('testing') {
             steps {
-                sh 'curl -I 3.86.166.255:8081'
+                sh 'curl -I 192.168.40.131:8081'
             }
         }
         stage('tagging'){
