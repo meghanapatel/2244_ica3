@@ -28,7 +28,7 @@ pipeline {
  
         stage('testing') {
             steps {
-                sh 'curl -I 192.168.40.131:808'4
+                sh 'curl -I 192.168.40.131:8084'
             }
         }
         stage('tagging'){
